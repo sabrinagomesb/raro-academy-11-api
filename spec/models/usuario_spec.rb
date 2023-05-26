@@ -3,6 +3,7 @@ require 'faker'
 
 RSpec.describe Usuario, type: :model do
   it { should_not be_valid }
+  it { should have_many :palpites } 
 
   context "criacao do usuario" do
     it "email e senha são obrigatórios" do

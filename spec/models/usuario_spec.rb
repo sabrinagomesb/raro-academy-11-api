@@ -4,6 +4,8 @@ require 'faker'
 RSpec.describe Usuario, type: :model do
   it { should_not be_valid }
   it { should have_many :palpites } 
+  it { should have_many :competicoes }
+  it { should have_many(:campeonatos).through(:competicoes) } 
 
   context "criacao do usuario" do
     it "email e senha são obrigatórios" do

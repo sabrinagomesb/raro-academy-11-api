@@ -262,6 +262,37 @@ RSpec.describe Palpite, type: :model do
 end
 ```
 
+### competições
+
+Esta entidade é a representação a associação de nosso usuário com os campeonatos que ele participa.
+
+```bash
+rails g model Competicao usuario:references campeonato:references
+rails db:migrate
+```
+
+```ruby
+# app/models/competicao.rb
+class Competicao < ApplicationRecord
+  belongs_to :usuario
+  belongs_to :campeonato
+end
+
+# app/models/usuario.rb
+# ...
+# em usuários, dizemos que um usuário tem muitos campeonatos, passando pela relação de competições
+has_many :competicoes
+has_many :campeonatos, through: :competicoes, source: :campeonato
+# ...
+
+# app/models/campeonato.rb
+# ...
+# O mesmo em campeonato, onde dizemos que eles possuem diversos competidores
+has_many :competicoes
+has_many :competidores, through: :competicoes, source: :usuario
+# ...
+```
+
 ## Criando os resources do active admin
 
 Uma vez que nossas entidades já estão criadas, podemos criar os `resources` do active admin. Um resource representa uma entidade a ser administrada pelo active admin. Para começarmos, vamos criar o resource de `campeonatos`

@@ -5,4 +5,10 @@ class Usuario < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :palpites
+  has_many :competicoes
+  has_many :campeonatos, through: :competicoes, source: :campeonato
+
+  def to_s
+    email
+  end
 end

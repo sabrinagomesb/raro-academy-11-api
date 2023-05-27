@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_26_225913) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_27_175039) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -30,6 +30,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_26_225913) do
     t.boolean "ativo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "competicoes", force: :cascade do |t|
+    t.integer "usuario_id", null: false
+    t.integer "campeonato_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campeonato_id"], name: "index_competicoes_on_campeonato_id"
+    t.index ["usuario_id"], name: "index_competicoes_on_usuario_id"
   end
 
   create_table "equipes", force: :cascade do |t|
@@ -84,6 +93,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_26_225913) do
     t.index ["reset_password_token"], name: "index_usuarios_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "competicoes", "campeonatos"
+  add_foreign_key "competicoes", "usuarios"
   add_foreign_key "jogos", "equipes", column: "mandante_id"
   add_foreign_key "jogos", "equipes", column: "visitante_id"
   add_foreign_key "jogos", "rodadas"

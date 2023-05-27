@@ -4,4 +4,8 @@ class Jogo < ApplicationRecord
   belongs_to :rodada
 
   has_many :palpites
+
+  def nome
+    "#{mandante.nome} x #{visitante.nome}"
+  end
 end

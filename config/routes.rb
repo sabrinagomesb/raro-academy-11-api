@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   devise_for :usuarios, ActiveAdmin::Devise.config
-  ActiveAdmin.routes(self)
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  ActiveAdmin.routes(self) rescue ActiveAdmin::DatabaseHitDuringLoad
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  namespace :api do
+    namespace :v1 do
+      resources :campeonatos
+    end
+  end
 end

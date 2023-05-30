@@ -3,12 +3,13 @@ require 'rails_helper'
 RSpec.describe 'api/v1/campeonato', type: :controller do
   describe Api::V1::CampeonatosController do
     before :each do
-      # @todo como melhorar este teste? Não funciona com o usuario criado no helper
       usuario = Usuario.create! email: 'test@teste.com', password: 'password'
       Campeonato.create!(nome: 'Campeonato 1', ativo: true)
       Campeonato.create!(nome: 'Campeonato 2', ativo: false)
       usuario.campeonatos << Campeonato.all
       usuario.save!
+
+      sign_in usuario
     end
 
     it "Retorna todos os campeonatos" do

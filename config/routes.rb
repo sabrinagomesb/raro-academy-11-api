@@ -8,6 +8,8 @@ Rails.application.routes.draw do
 
       post :auth, to: 'authentication#create'
       get :auth, to: 'authentication#fetch'
+
+      resources :campeonatos, only: [:index]
     end
   end
 end

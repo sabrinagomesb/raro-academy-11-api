@@ -9,7 +9,9 @@ Rails.application.routes.draw do
       post :auth, to: 'authentication#create'
       get :auth, to: 'authentication#fetch'
 
-      resources :campeonatos, only: [:index]
+      resources :campeonatos, only: [:index] do
+        resources :rodadas, only: [:index]
+      end
     end
   end
 end

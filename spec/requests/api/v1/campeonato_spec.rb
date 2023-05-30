@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe 'api/v1/campeonato', type: :controller do
   describe Api::V1::CampeonatosController do
     before :each do
-      usuario = Usuario.create! email: 'test@teste.com', password: 'password'
-      Campeonato.create!(nome: 'Campeonato 1', ativo: true)
-      Campeonato.create!(nome: 'Campeonato 2', ativo: false)
+      usuario = create(:usuario)
+      campeonato = create(:campeonato)
+      campeonato = create(:campeonato_inativo, nome: 'Campeonato 2')
       usuario.campeonatos << Campeonato.all
       usuario.save!
 

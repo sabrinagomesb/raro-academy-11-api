@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_27_175039) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_31_010226) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -30,6 +30,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_27_175039) do
     t.boolean "ativo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "api_id"
   end
 
   create_table "competicoes", force: :cascade do |t|
@@ -78,6 +79,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_27_175039) do
     t.integer "campeonato_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "api_id"
     t.index ["campeonato_id"], name: "index_rodadas_on_campeonato_id"
   end
 
@@ -89,6 +91,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_27_175039) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "admin"
     t.index ["email"], name: "index_usuarios_on_email", unique: true
     t.index ["reset_password_token"], name: "index_usuarios_on_reset_password_token", unique: true
   end

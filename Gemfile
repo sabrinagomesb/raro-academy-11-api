@@ -53,6 +53,8 @@ gem 'devise'
 gem 'activeadmin'
 gem 'rack-cors'
 gem 'jwt'
+gem 'rest-client'
+gem 'whenever'
 
 group :development, :test do
   gem 'guard-rspec'

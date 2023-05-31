@@ -8,4 +8,11 @@ class Api::V1::CampeonatosController < Api::V1::ApiController
 
     render json: campeonatos
   end
+
+  def create
+    cliente = ApiFutebolService.new
+    cliente.atualiza_campeonatos!
+
+    head :no_content
+  end
 end

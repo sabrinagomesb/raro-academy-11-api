@@ -51,6 +51,7 @@ gem "bootsnap", require: false
 gem 'sass-rails'
 gem 'devise'
 gem 'activeadmin'
+gem 'jwt'
 
 group :development, :test do
   gem 'guard-rspec'

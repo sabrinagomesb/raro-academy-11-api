@@ -1,0 +1,399 @@
+openapi: 3.0.3
+info:
+  title: Bolão Raro Academy
+  description: Esta API expõe as funcionalidades necessárias para um usuário do nosso aplicativos de palpites em jogos dos campeonatos, que nossos colaboradores acompanham.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api/v1
+tags:
+  - name: login
+    description: Rotas de autenticação e autorizaçao de usuários
+  - name: campeonatos
+    description: Recurso dos campeonatos onde o usuário logado compete
+  - name: rodadas
+    description: Rodadas de determinado campeonato
+  - name: jogos
+    description: Jogos da Rodada
+  - name: palpites
+    description: Palpites nos jogos
+paths:
+  /auth:
+    post:
+      tags:
+        - login
+      summary: Rota de autenticação do usuário da API
+      description: Rota de autenticação do usuário da API
+      operationId: autenticaUsuario
+      requestBody:
+        description: O usuário deverá se autenticar via email e senha. Estes dados serão enviados no body da minha requisição, através dos campos email e password.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutenticacaoDto'
+        required: true
+      responses:
+        '200':
+          description: Usuário autenticado com sucesso. O usuário recebe o token de acesso à api nesta reposta.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutenticacaoComSucessoDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AutenticacaoComSucessoDto'
+        '401':
+          description: Usuário ou senha incorretos.
+  /campeonatos:
+    get:
+      tags:
+        - campeonatos
+      summary: Listagem de campeonatos do usuário
+      description: Lista todos os campeonatos que o usuário logado participa
+      operationId: listaCampeonatos
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token de autenticação do usuário
+          required: true
+          schema:
+            type: string
+        - name: somente_ativos
+          in: query
+          description: Filtra somente os campeonatos ativos. Se o valor for igual a `false` ou não informado, todos os campeonatos são retornados. Por padrão, deve retornar todos os campeonatos.
+          required: false
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: Lista de campeonatos encontrados para o usuário
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Campeonato'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Campeonato'
+        '401':
+          description: Usuário não logado
+  /campeonatos/{id}/rodadas:
+    get:
+      tags:
+        - rodadas
+      summary: Lista as rodadas de um campeonato
+      description: Lista as rodadas de um campeonato. Deve sempre ser filtrado pelo id do campeonato
+      operationId: listaRodadas
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token de autenticação do usuário
+          required: true
+          schema:
+            type: string
+        # um novo tipo de parameter do swagger: sempre que nossa rota possui um segmento com `{<algum_id>}`, estamos
+        # informando que temos uma variável presente na rota. Sendo este o caso, precisamos, obrigatoriamente, descrever
+        # este parâmetro do tipo `path`.
+        - name: id
+          in: path
+          description: ID do campeonato a ser retornado.
+          required: true
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: Lista de campeonatos encontrados para o usuário
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rodada'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rodada'
+        '401':
+          description: Usuário não logado
+  /campeonatos/{campeonato_id}/rodadas/{rodada_id}/jogos:
+    get:
+      tags:
+        - jogos
+      summary: Busca campeonato pelo ID
+      description: Busca as rodadas de um campeonato em específico, através do id. Este é informado na URL. Esta rota deve retornar os dados do jogo - os times mandante e visitante, e a quantidade de gols que cada um fez, os palpites do usuário e a pontuação obtida com aqueles palpites
+      operationId: buscaCampeonato
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token de autenticação do usuário
+          required: true
+          schema:
+            type: string
+        - name: campeonato_id
+          in: path
+          description: ID do campeonato a ser retornado.
+          required: true
+          schema:
+            type: boolean
+            default: true
+        - name: rodada_id
+          in: path
+          description: ID do campeonato a ser retornado.
+          required: true
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: Lista de campeonatos encontrados para o usuário
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JogoComPalpite'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JogoComPalpite'
+        '401':
+          description: Usuário não logado
+  /campeonatos/{campeonato_id}/rodadas/{rodada_id}/palpites:
+    # repare que pela primeira vez estamos usando um verbo que não o get. Relembrando:
+    # se este caminho tivesse dois verbos, basta lista-los na sequencia.
+    put:
+      tags:
+        - palpites
+      summary: Cria ou atualiza os palpites nos jogos
+      description: Nesta rota, o cliente poderá criar ou atualizar seus palpites em todos os jogos de uma rodada.
+      operationId: criaOuAtualizaPalpites
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token de autenticação do usuário
+          required: true
+          schema:
+            type: string
+        - name: campeonato_id
+          in: path
+          description: ID do campeonato a ser retornado.
+          required: true
+          schema:
+            type: boolean
+            default: true
+        - name: rodada_id
+          in: path
+          description: ID do campeonato a ser retornado.
+          required: true
+          schema:
+            type: boolean
+            default: true
+            
+      # uma nova propriedade em nosso documento. Nos verbos que usamos para enviar
+      # dados (post, put, patch), podemos anexar um body à request. Esta é a forma
+      # como registramos no swagger a existência deste body.
+      requestBody:
+        description: Envia uma lista de palpites para diversos jogos da rodada. Caso um palpite anterior tenha sido enviado para o jogo, atualiza os valores. Caso contrário, cria um novo palpite para este jogo.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CriaPalpiteDto'
+        required: true
+      responses:
+        '200':
+          description: Lista de campeonatos encontrados para o usuário
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JogoComPalpite'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JogoComPalpite'
+        '401':
+          description: Usuário não logado
+        '400':
+          description: O usuário não pode dar palpites em rodadas que já foram iniciadas
+  /campeonatos/{campeonato_id}/ranking:
+    get:
+      tags:
+        - campeonatos
+      summary: Ranking dos competidores de um campeonato
+      description: Ranking dos competidores de um campeonato
+      operationId: ranking
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token de autenticação do usuário
+          required: true
+          schema:
+            type: string
+        - name: campeonato_id
+          in: path
+          description: ID do campeonato a ser retornado.
+          required: true
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: Ranking dos competidores de um campeonato
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Competidor'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Competidor'
+        '401':
+          description: Usuário não logado
+components:
+  schemas:
+    Campeonato:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        nome:
+          type: string
+          example: Campeonato Brasileiro 2003
+        ativo:
+          type: boolean
+    Rodada:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        nome:
+          type: string
+          example: Campeonato Brasileiro 2003
+        ativo:
+          type: boolean
+    Jogo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        gols_mandante:
+          type: integer
+          format: int32
+          example: 1
+        gols_visitante:
+          type: integer
+          format: int32
+          example: 1
+        mandante:
+          $ref: '#/components/schemas/Equipe'
+        visitante:
+          $ref: '#/components/schemas/Equipe'
+    Equipe:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        nome:
+          type: string
+          example: Campeonato Brasileiro 2003
+    Palpite:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        gols_mandante:
+          type: integer
+          format: int32
+          example: 1
+        gols_visitante:
+          type: integer
+          format: int32
+          example: 1
+          
+    # neste modelo, preferi criar separadamente os dois objetos que vamos
+    # retornar, o Jogo e o Palpite, e depois junta-los aqui. Isso me ajuda
+    # a compor entidades mais ajustadas, que podem ser utilizadas depois
+    # por outros serviços que podem consumir nossa API.
+    JogoComPalpite:
+      allOf:
+        - $ref: '#/components/schemas/Jogo'
+        - type: object
+          properties:
+            palpite:
+              $ref: '#/components/schemas/Palpite'
+
+    # Criei um schema específico para o envio dos dados dos palpites para
+    # a rota. DTO significa data transfer object. É um padrão que adotamos
+    # em diversas arquiteturas, onde criamos um tipo bem específico para 
+    # enviar dados que não têm a estrutura exata de um modelo.
+    # 
+    # Algumas arquiteturas, como o modelo hexagonal, pedem que mesmo que seu
+    # dto e seu modelo sejam totalmente coincidentes, ainda exista um DTO, para
+    # garantir completo desacoplamento entre camadas.
+    CriaPalpiteDto:
+      type: object
+      properties:
+        palpites:
+          type: array
+          items:
+            $ref: '#/components/schemas/PalpiteJogoDto'
+    PalpiteJogoDto:
+      type: object
+      properties:
+        jogo_id:
+          type: integer
+          format: int32
+          example: 1
+        gols_mandante:
+          type: integer
+          format: int32
+          example: 1
+        gols_visitante:
+          type: integer
+          format: int32
+          example: 1
+    Competidor:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        nome:
+          type: string
+          example: Alan Turing
+    AutenticacaoDto:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: contato@rarolabs.com.br
+        password:
+          type: string
+    AutenticacaoComSucessoDto:
+      type: object
+      properties:
+        token:
+          type: string

@@ -9,10 +9,12 @@ RSpec.describe Campeonato, type: :model do
   it { should have_many(:competidores).through(:competicoes) } 
 
   context "busca de campeonatos ativos" do
-    it "deve retornar somente os campeonatos ativos" do
-      Campeonato.create! nome: "Campeonato 1", ativo: true
-      Campeonato.create! nome: "Campeonato 2", ativo: false
+    before :each do
+      create(:campeonato)
+      create(:campeonato_inativo)
+    end
 
+    it "deve retornar somente os campeonatos ativos" do
       expect(Campeonato.ativos.count).to eq 1
     end
   end

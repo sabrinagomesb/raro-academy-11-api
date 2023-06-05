@@ -52,6 +52,8 @@ gem 'sass-rails'
 gem 'devise'
 gem 'activeadmin'
 gem 'jwt'
+gem 'rest-client'
+gem 'whenever', require: false
 
 group :development, :test do
   gem 'guard-rspec'

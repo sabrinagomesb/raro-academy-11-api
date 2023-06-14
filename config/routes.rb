@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       get :auth, to: "authentication#fetch"
 
       resources :campeonatos, only: [:index, :create, :show] do
-        resources :rodadas, only: [:index] do
+        resources :rodadas, only: [:index, :show] do
           resources :jogos, only: [:index]
           put "/palpites", to: "palpites#cria_ou_atualiza_palpites"
         end

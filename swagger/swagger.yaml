@@ -194,7 +194,6 @@ paths:
           schema:
             type: boolean
             default: true
-            
       # uma nova propriedade em nosso documento. Nos verbos que usamos para enviar
       # dados (post, put, patch), podemos anexar um body à request. Esta é a forma
       # como registramos no swagger a existência deste body.
@@ -223,6 +222,49 @@ paths:
           description: Usuário não logado
         '400':
           description: O usuário não pode dar palpites em rodadas que já foram iniciadas
+    get:
+      tags:
+        - palpites
+      summary: Lista os palpites nos jogos
+      description: Nesta rota, o cliente poderá listar seus palpites feitos nos jogos de uma rodada.
+      operationId: index
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token de autenticação do usuário
+          required: true
+          schema:
+            type: string
+        - name: campeonato_id
+          in: path
+          description: ID do campeonato a ser retornado.
+          required: true
+          schema:
+            type: boolean
+            default: true
+        - name: rodada_id
+          in: path
+          description: ID do campeonato a ser retornado.
+          required: true
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: Lista de campeonatos encontrados para o usuário
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Palpite'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Palpite'
+        '401':
+          description: Usuário não logado
   /campeonatos/{campeonato_id}/ranking:
     get:
       tags:
@@ -330,7 +372,14 @@ components:
           type: integer
           format: int32
           example: 1
-          
+        pontuacao:
+          type: integer
+          format: int32
+          example: 6
+    Palpites:
+      type: array
+      items:
+        $ref: '#/components/schemas/PalpiteJogoDto'
     # neste modelo, preferi criar separadamente os dois objetos que vamos
     # retornar, o Jogo e o Palpite, e depois junta-los aqui. Isso me ajuda
     # a compor entidades mais ajustadas, que podem ser utilizadas depois
@@ -342,12 +391,11 @@ components:
           properties:
             palpite:
               $ref: '#/components/schemas/Palpite'
-
     # Criei um schema específico para o envio dos dados dos palpites para
     # a rota. DTO significa data transfer object. É um padrão que adotamos
-    # em diversas arquiteturas, onde criamos um tipo bem específico para 
+    # em diversas arquiteturas, onde criamos um tipo bem específico para
     # enviar dados que não têm a estrutura exata de um modelo.
-    # 
+    #
     # Algumas arquiteturas, como o modelo hexagonal, pedem que mesmo que seu
     # dto e seu modelo sejam totalmente coincidentes, ainda exista um DTO, para
     # garantir completo desacoplamento entre camadas.
@@ -373,6 +421,10 @@ components:
           type: integer
           format: int32
           example: 1
+        pontuacao:
+          type: integer
+          format: int32
+          example: 6
     Competidor:
       type: object
       properties:

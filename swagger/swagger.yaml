@@ -435,6 +435,10 @@ components:
         nome:
           type: string
           example: Alan Turing
+        pontuacao:
+          type: integer
+          format: int32
+          example: 18
     AutenticacaoDto:
       type: object
       properties:

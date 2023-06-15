@@ -7,5 +7,7 @@
 #   Character.create(name: "Luke", movie: movies.first)
 usuario = Usuario.find_by_email('admin@example.com')
 if usuario.nil? and Rails.env.development?
-  Usuario.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
+  Usuario.create!(nome: 'Administrador', email: 'admin@example.com', password: 'password', password_confirmation: 'password')
+
+  Usuario.create!(nome: 'Paulo Fernandes', email: 'paulo@example.com', password: 'password', password_confirmation: 'password')
 end

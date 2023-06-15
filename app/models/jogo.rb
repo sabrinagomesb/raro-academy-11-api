@@ -9,4 +9,17 @@ class Jogo < ApplicationRecord
   def nome
     "#{mandante.nome} x #{visitante.nome}"
   end
+
+  def empate?
+    gols_mandante == gols_visitante
+  end
+
+  def vitoria_mandante?
+    gols_mandante > gols_visitante
+  end
+
+  def vitoria_visitante?
+    gols_mandante < gols_visitante
+  end
+
 end

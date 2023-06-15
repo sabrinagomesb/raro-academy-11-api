@@ -9,4 +9,14 @@ class Campeonato < ApplicationRecord
   def to_s
     nome
   end
+
+  def ranking
+    competidores.map do |competidor|
+      {
+        id: competidor.id,
+        nome: competidor.nome,
+        pontuacao: competidor.pontuacao(self)
+      }
+    end.sort_by { |competidor| competidor[:pontuacao] }.reverse
+  end
 end

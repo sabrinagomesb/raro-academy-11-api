@@ -14,12 +14,14 @@ Rails.application.routes.draw do
       get :auth, to: 'authentication#fetch'
 
       resources :campeonatos, only: %i[index create show] do
+        get 'ranking', to: 'campeonatos#ranking'
+
         resources :rodadas, only: %i[index show] do
           resources :jogos, only: [:index]
           resources :palpites, only: [:index, :create_or_update] do
             collection do
-              post :create_or_update
               get :index
+              put '/', to: 'palpites#create_or_update'
             end
           end
         end

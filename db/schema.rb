@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_15_040508) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_15_133158) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -69,6 +69,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_040508) do
     t.integer "gols_visitante"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "pontuacao", default: 0
     t.index ["jogo_id"], name: "index_palpites_on_jogo_id"
     t.index ["usuario_id"], name: "index_palpites_on_usuario_id"
   end

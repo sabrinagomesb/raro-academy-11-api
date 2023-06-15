@@ -194,13 +194,6 @@ paths:
           schema:
             type: boolean
             default: true
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
->>>>>>> d793c4f (feat: adiciona pontuacao ao swagger)
-=======
->>>>>>> c9ddd67 (docs: atualiza swagger)
       # uma nova propriedade em nosso documento. Nos verbos que usamos para enviar
       # dados (post, put, patch), podemos anexar um body à request. Esta é a forma
       # como registramos no swagger a existência deste body.

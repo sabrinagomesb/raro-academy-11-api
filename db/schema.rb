@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_15_133158) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_15_155352) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -46,6 +46,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_133158) do
     t.string "nome"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "api_id"
   end
 
   create_table "jogos", force: :cascade do |t|
@@ -57,6 +58,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_133158) do
     t.datetime "data_hora"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "api_id"
+    t.boolean "ativo"
     t.index ["mandante_id"], name: "index_jogos_on_mandante_id"
     t.index ["rodada_id"], name: "index_jogos_on_rodada_id"
     t.index ["visitante_id"], name: "index_jogos_on_visitante_id"

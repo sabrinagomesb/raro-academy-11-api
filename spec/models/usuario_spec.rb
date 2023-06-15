@@ -40,8 +40,13 @@ RSpec.describe Usuario, type: :model do
       expect(usuario.pontuacao(campeonato)).to eq 6
     end
 
+    it 'deve retornar a pontuação de errar todas as possibilidades do usuario no campeonato' do
+      palpite.update gols_mandante: 1, gols_visitante: 3
+      expect(usuario.pontuacao(campeonato)).to eq 0
+    end
+
     it 'deve retornar a pontuacao acerto de emptate do usuario no campeonato' do
-      jogo.update gols_mandante: 1, gols_visitante: 1
+      palpite.update gols_mandante: 1, gols_visitante: 1
       expect(usuario.pontuacao(campeonato)).to eq 3
     end
 
@@ -55,12 +60,6 @@ RSpec.describe Usuario, type: :model do
       jogo.update gols_mandante: 1, gols_visitante: 3
       palpite.update gols_mandante: 0, gols_visitante: 1
       expect(usuario.pontuacao(campeonato)).to eq 3
-    end
-
-    it 'deve retornar a pontuação de errar todas as possibilidades do usuario no campeonato' do
-      jogo.update gols_mandante: 1, gols_visitante: 3
-      palpite.update gols_mandante: 0, gols_visitante: 0
-      expect(usuario.pontuacao(campeonato)).to eq 0
     end
 
     it 'deve retornar a pontuacao de não palpitar do usuario no campeonato' do

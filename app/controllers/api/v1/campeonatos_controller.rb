@@ -1,5 +1,5 @@
 class Api::V1::CampeonatosController < Api::V1::ApiController
-  before_action :fetch_campeonato, only: [:show]
+  before_action :fetch_campeonato, only: [:show, :ranking]
 
   def index
     if params[:somente_ativos]
@@ -22,10 +22,18 @@ class Api::V1::CampeonatosController < Api::V1::ApiController
     render json: @campeonato
   end
 
+  def ranking
+    render json: @campeonato.ranking
+  end
+
   private
 
   def fetch_campeonato
-    @campeonato = current_usuario.campeonatos.find(params[:id])
+    if params[:id]
+      @campeonato = current_usuario.campeonatos.find(params[:id])
+    elsif params[:campeonato_id]
+      @campeonato = current_usuario.campeonatos.find(params[:campeonato_id])
+    end
   rescue ActiveRecord::RecordNotFound
     render json: { errors: "Campeonato não encontrado" }, status: :not_found
   end

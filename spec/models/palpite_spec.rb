@@ -76,12 +76,12 @@ RSpec.describe Palpite, type: :model do
     let!(:palpite) { create(:palpite, gols_mandante: 1, gols_visitante: 2, jogo: jogo) }
 
     it 'deve retornar true se o palpite acertou os gols do mandante' do
-      expect(palpite.acertou_gols_mandante?(palpite.jogo)).to be true
+      expect(palpite.acertou_gols_mandante?).to be true
     end
 
     it 'deve retornar false se o palpite não acertou os gols do mandante' do
       palpite.gols_mandante = 2
-      expect(palpite.acertou_gols_mandante?(palpite.jogo)).to be false
+      expect(palpite.acertou_gols_mandante?).to be false
     end
   end
 
@@ -90,12 +90,32 @@ RSpec.describe Palpite, type: :model do
     let!(:palpite) { create(:palpite, gols_mandante: 1, gols_visitante: 2, jogo: jogo) }
 
     it 'deve retornar true se o palpite acertou os gols do visitante' do
-      expect(palpite.acertou_gols_visitante?(palpite.jogo)).to be true
+      expect(palpite.acertou_gols_visitante?).to be true
     end
 
     it 'deve retornar false se o palpite não acertou os gols do visitante' do
       palpite.gols_visitante = 1
-      expect(palpite.acertou_gols_visitante?(palpite.jogo)).to be false
+      expect(palpite.acertou_gols_visitante?).to be false
+    end
+  end
+
+  describe "#set_pontuacao" do
+    # check if before save set pontuacao
+    let!(:usuario) { create(:usuario) }
+    let!(:jogo) { create(:jogo, gols_mandante: 1, gols_visitante: 3) }
+    let!(:palpite) { create(:palpite, gols_mandante: 1, gols_visitante: 1, jogo: jogo, usuario: usuario) }
+
+    context "quando começa o palpite" do
+      it "should set pontuacao" do
+        expect(palpite.pontuacao).to eq 0
+      end
+    end
+
+    context "quando o palpite é atualizado" do
+      it "should set pontuacao" do
+        palpite.update(gols_mandante: 1, gols_visitante: 5)
+        expect(palpite.pontuacao).to eq 3
+      end
     end
   end
 end

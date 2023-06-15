@@ -1,6 +1,6 @@
 # setup do projeto
 
-## criação do sistema de administração do bolão 
+## criação do sistema de administração do bolão
 
 Esta primeira fase, vamos criar o setup básico do app. Vamos continuar fazendo o que já conhecemos: inicialização do projeto rails e autenticação utilizando o devise. Desta vez, como queremos criar um backoffice para controlar nossa aplicação de forma super rápida, vou utilizar uma gem especialista em fazer aplicações de administração de serviços: o [active admin](https://activeadmin.info/). Segue o roteiro:
 
@@ -51,6 +51,7 @@ Neste momento, todos os usuários de nossa aplicação são também usuários ad
 ## Criando modelos
 
 Antes de dar sequência, podemos notar que nosso modelo de Usuário está criado, mas ainda não testado. O comando `rspec` nos mostra isso. Vamos adicionar alguns testes de spec para ele.
+
 ```ruby
 # spec/models/usuario_spec.rb
 require 'rails_helper'
@@ -130,8 +131,8 @@ end
 ```ruby
 # spec/models/campeonato_spec.rb
 
-# ... 
-# adicionar uma nova validação no teste do campeonato. 
+# ...
+# adicionar uma nova validação no teste do campeonato.
 it { should have_many :rodadas }
 # ...
 ```
@@ -160,7 +161,7 @@ rails g model Equipe nome
 rails db:migrate
 ```
 
-``` ruby
+```ruby
 # app/models/equipe.rb
 class Equipe < ApplicationRecord
   validates :nome, presence: true
@@ -230,7 +231,6 @@ end
 
 ```
 
-
 #### Palpites
 
 ```bash
@@ -240,13 +240,12 @@ rails db:migrate
 
 - adiciona `has_many: palpites` em usuário e jogos
 
-
 ```ruby
 # app/models/palpite.rb
 class Palpite < ApplicationRecord
   validates :gols_mandante, presence: true
   validates :gols_visitante, presence: true
-  
+
   belongs_to :jogo
   belongs_to :usuario
 end
@@ -255,8 +254,8 @@ end
 require 'rails_helper'
 
 RSpec.describe Palpite, type: :model do
-  it { should belong_to :jogo } 
-  it { should belong_to :usuario } 
+  it { should belong_to :jogo }
+  it { should belong_to :usuario }
   it { should validate_presence_of :gols_mandante }
   it { should validate_presence_of :gols_visitante }
 end
@@ -301,7 +300,7 @@ Uma vez que nossas entidades já estão criadas, podemos criar os `resources` do
 rails g active_admin:resource Campeonato
 ```
 
-Este comando inicia o arquivo `app/admin/campeonatos.rb`. Neste arquivo, podemos configurar, através de uma linguagem em [dsl](https://pt.wikipedia.org/wiki/Linguagem_de_dom%C3%ADnio_espec%C3%ADfico), todo o comportamento do crud de administração dos nossos campeonatos. Esta ferramenta é extremamente útil para a nossa situação, onde queremos criar um sistema de administração de forma rápida e sem muito esforço. 
+Este comando inicia o arquivo `app/admin/campeonatos.rb`. Neste arquivo, podemos configurar, através de uma linguagem em [dsl](https://pt.wikipedia.org/wiki/Linguagem_de_dom%C3%ADnio_espec%C3%ADfico), todo o comportamento do crud de administração dos nossos campeonatos. Esta ferramenta é extremamente útil para a nossa situação, onde queremos criar um sistema de administração de forma rápida e sem muito esforço.
 
 ```ruby
 # app/admin/campeonatos.rb

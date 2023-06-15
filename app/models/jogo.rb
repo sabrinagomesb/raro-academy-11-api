@@ -4,7 +4,14 @@ class Jogo < ApplicationRecord
   belongs_to :rodada
   has_many :palpites
 
+  before_save :atualiza_pontuacoes
+
   attr_accessor :palpite
+
+  def pontuacao_palpite
+    palpite = Palpite.do_usuario(current_usuario.id).da_rodada(rodada_id).find_by(jogo_id: id)
+    return palpite&.pontuacao
+  end
 
   def nome
     "#{mandante.nome} x #{visitante.nome}"
@@ -22,4 +29,9 @@ class Jogo < ApplicationRecord
     gols_mandante < gols_visitante
   end
 
+  def atualiza_pontuacoes
+    palpites.each do |palpite|
+      palpite.save
+    end
+  end
 end

@@ -195,9 +195,12 @@ paths:
             type: boolean
             default: true
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> d793c4f (feat: adiciona pontuacao ao swagger)
+=======
+>>>>>>> c9ddd67 (docs: atualiza swagger)
       # uma nova propriedade em nosso documento. Nos verbos que usamos para enviar
       # dados (post, put, patch), podemos anexar um body à request. Esta é a forma
       # como registramos no swagger a existência deste body.
@@ -339,6 +342,9 @@ components:
           type: integer
           format: int32
           example: 1
+        data_hora:
+          type: string
+          example: '2023-04-05T00:00:00.000Z'
         gols_mandante:
           type: integer
           format: int32
@@ -380,6 +386,10 @@ components:
           type: integer
           format: int32
           example: 6
+    Palpites:
+      type: array
+      items:
+        $ref: '#/components/schemas/PalpiteJogoDto'
     # neste modelo, preferi criar separadamente os dois objetos que vamos
     # retornar, o Jogo e o Palpite, e depois junta-los aqui. Isso me ajuda
     # a compor entidades mais ajustadas, que podem ser utilizadas depois
